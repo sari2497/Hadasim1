@@ -1,6 +1,7 @@
 
-DROP TABLE IF EXISTS family_Tree;
-DROP TABLE IF EXISTS person;
+--DROP TABLE IF EXISTS family_Tree;
+--DROP TABLE IF EXISTS person;
+
 --הגדרת הטבלאות והערכים שלהן
 Create table person 
 (
