@@ -26,6 +26,7 @@ def sum_of_errors_in_file(N , filename = "logs.txt" ):
 
         #מציאת N קודי השגיאה השכיחים ביותר
     most_common_errors = total_counter.most_common(N)
+    
     print(f"\n The {N} most common errors in the file '{filename}':\n")
     for code, count in most_common_errors:
         print(f"error code {code}: appeared {count} times")
