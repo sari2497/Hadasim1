@@ -11,7 +11,6 @@ from datetime import datetime
 from collections import defaultdict
 
 
-
 def check_and_divide(filename = "time_series.parquet"):
     # הגדרת מבני נתונים - מילון וטבלת גיבוב
     rows_per_hour = defaultdict(list)
@@ -19,7 +18,7 @@ def check_and_divide(filename = "time_series.parquet"):
 
     # קריאת הקובץ
     try:
-        df = pd.read_parquet("time_series.parquet")
+       df = pd.read_parquet("time_series.parquet")
 
     except Exception as e:
         print(f"Error reading the parquet file: {e}")
@@ -43,13 +42,16 @@ def check_and_divide(filename = "time_series.parquet"):
             if is_num != is_num:
                 print(f"value is not a number {row['value']}")
                 continue
+                
         except (ValueError, TypeError):
             print(f"value is not a number {row['value']}")
             continue
+            
         # בדיקת כפילויות
         if date_obj in double:
             print(f"this date already exist {date_obj}")
             continue
+            
         #אם התאריך לא נמצא עדיין - הכנסתו לטבלה
         double.add(date_obj)
 
@@ -61,8 +63,7 @@ def check_and_divide(filename = "time_series.parquet"):
         with open(f"hour_{hour}.csv", "w", newline='' , encoding="utf-8") as per_hour_file:
             writer = csv.writer(per_hour_file)
             writer.writerows(rows)
-    print(len(double))
-
+    
 
 
 
@@ -73,25 +74,30 @@ def out_avg_file():
 
 #מעבר כל אחד מהקבצים , חישוב הממוצע עבור כל תאריך בנפרד וכתיבת התוצאה לקובץ הפלט
         for name_of_file in names_of_files:
+            
             hour = int(name_of_file.split('_')[1].split('.')[0])
+            
             try:
                 with open(name_of_file , newline='') as hour_file:
                     read_from_file = csv.reader(hour_file)
+                    
                     for row in read_from_file:
                         #הכנסה למילון ע"פ תאריך
                         date = row[0].split()[0]
                         value_per_date[date].extend(float(val) for val in row[1:])
+                        
                     for date , val in value_per_date.items():
                         avg = sum(val) / len(val)
+                        
                         if len(val) > 0:
                             with open(out_file, 'a', newline="", encoding="utf-8") as output:
                                 writer = csv.writer(output)
                                 writer.writerow([avg , f"{date} {hour}:00"])
                         else:
                             print(f"Warning: No values found for date {date}")
+                            
                     #ריקון המילון מערכים של שעה קודמת על מנת שלא יכנסו ערכים של שעות שונות עבור אותם תאריכים
                     value_per_date.clear()
-
 
 
             except FileNotFoundError:
@@ -101,7 +107,7 @@ def out_avg_file():
 
 
 
-
+#קריאה לפונקציות
 check_and_divide("time_series.parquet")
 out_avg_file()
 
